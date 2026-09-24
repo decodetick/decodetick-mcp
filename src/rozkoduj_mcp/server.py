@@ -1,4 +1,4 @@
-"""MCP server instance for rozkoduj-mcp."""
+"""MCP server instance for decodetick-mcp."""
 
 import os
 from collections.abc import AsyncIterator
@@ -77,7 +77,7 @@ mcp = MCPServer(
         "public articles (returns slug+locale for citation) and, for "
         "signed-in paid tiers, the deeper knowledge corpus."
     ),
-    version=version("rozkoduj-mcp"),
+    version=version("decodetick-mcp"),
     lifespan=app_lifespan,
 )
 

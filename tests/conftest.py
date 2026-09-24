@@ -1,4 +1,4 @@
-"""Shared test fixtures for rozkoduj-mcp."""
+"""Shared test fixtures for decodetick-mcp."""
 
 import asyncio
 from collections.abc import Iterator

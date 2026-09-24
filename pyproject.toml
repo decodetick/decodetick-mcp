@@ -1,10 +1,10 @@
 [project]
-name = "rozkoduj-mcp"
+name = "decodetick-mcp"
 # CalVer, `YYYY.M.D` of the release. This is the source of truth: the build
 # reads it, the container built from source reports it to clients, and the
 # publish workflow refuses to run when it disagrees with the release tag.
 # Bump it in the same change that cuts a release, or that check fails.
-version = "2026.8.15"
+version = "2026.9.25"
 description = "Market intelligence for your AI assistant - algo-trading strategies, analytics and specialized research knowledge."
 readme = "README.md"
 license = "MIT"
@@ -42,13 +42,10 @@ dependencies = [
 ]
 
 [project.scripts]
-rozkoduj-mcp = "rozkoduj_mcp:main"
+decodetick-mcp = "rozkoduj_mcp:main"
 
 [project.urls]
 Homepage = "https://www.rozkoduj.com"
-Repository = "https://github.com/rozkoduj/rozkoduj-mcp"
-Issues = "https://github.com/rozkoduj/rozkoduj-mcp/issues"
-Changelog = "https://github.com/rozkoduj/rozkoduj-mcp/releases"
 
 [dependency-groups]
 dev = [
@@ -68,6 +65,11 @@ dev = [
 [build-system]
 requires = ["uv_build>=0.11.32,<0.13"]
 build-backend = "uv_build"
+
+# The distribution is `decodetick-mcp`; the import package keeps its internal
+# name, so the backend cannot derive it from the project name.
+[tool.uv.build-backend]
+module-name = "rozkoduj_mcp"
 
 [tool.ruff.lint]
 select = [

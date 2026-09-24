@@ -1,19 +1,12 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/rozkoduj/rozkoduj-mcp/main/docs/assets/logo-dark.svg">
-  <img alt="Rozkoduj MCP" src="https://raw.githubusercontent.com/rozkoduj/rozkoduj-mcp/main/docs/assets/logo.svg" width="240">
-</picture>
-
 # Decode the Markets
 
 Market intelligence for your AI assistant - algo-trading strategies, analytics and specialized research knowledge.
 
-[![PyPI](https://img.shields.io/pypi/v/rozkoduj-mcp)](https://pypi.org/project/rozkoduj-mcp/)
+[![PyPI](https://img.shields.io/pypi/v/decodetick-mcp)](https://pypi.org/project/decodetick-mcp/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Python 3.14+](https://img.shields.io/badge/python-3.14%2B-blue)](https://python.org)
-[![CI](https://img.shields.io/github/actions/workflow/status/rozkoduj/rozkoduj-mcp/ci.yml?branch=main&label=CI)](https://github.com/rozkoduj/rozkoduj-mcp/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/rozkoduj/rozkoduj-mcp)](https://codecov.io/gh/rozkoduj/rozkoduj-mcp)
 
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=rozkoduj&config=eyJ1cmwiOiJodHRwczovL21jcC5yb3prb2R1ai5jb20vbWNwIn0%3D)
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_rozkoduj-0098FF?logo=githubcopilot)](https://insiders.vscode.dev/redirect/mcp/install?name=rozkoduj&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.rozkoduj.com%2Fmcp%22%7D)
@@ -123,8 +116,8 @@ Custom MCP connectors need **Developer mode** (Plus/Pro/Team/Enterprise/Edu):
 <summary><b>Self-hosted (PyPI / Docker)</b></summary>
 
 ```bash
-uvx rozkoduj-mcp               # run straight from PyPI
-pip install rozkoduj-mcp       # or install
+uvx decodetick-mcp             # run straight from PyPI
+pip install decodetick-mcp     # or install
 docker run -p 8080:8080 $(docker build -q .)  # or containerized
 ```
 

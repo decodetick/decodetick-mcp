@@ -1,4 +1,4 @@
-"""rozkoduj-mcp: MCP server for Rozkoduj's published trading strategies and knowledge base."""
+"""decodetick-mcp: MCP server for Rozkoduj's published trading strategies and knowledge base."""
 
 import contextlib
 import os
@@ -20,7 +20,7 @@ from rozkoduj_mcp.auth import (
 from rozkoduj_mcp.logging import RequestLoggingMiddleware
 from rozkoduj_mcp.server import TRANSPORT_SECURITY, mcp
 
-__version__ = version("rozkoduj-mcp")
+__version__ = version("decodetick-mcp")
 
 
 def main() -> None:

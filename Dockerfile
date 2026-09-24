@@ -34,4 +34,4 @@ USER mcp
 
 EXPOSE 8080
 
-CMD ["rozkoduj-mcp"]
+CMD ["decodetick-mcp"]
