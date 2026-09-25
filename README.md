@@ -5,7 +5,7 @@
   <img alt="Decodetick MCP" src="https://raw.githubusercontent.com/decodetick/decodetick-mcp/main/docs/assets/logo.svg" width="440">
 </picture>
 
-# Decode the Markets
+# Decode the tick. Find the edge.
 
 Market intelligence for your AI assistant - algo-trading strategies, analytics and specialized research knowledge.
 
