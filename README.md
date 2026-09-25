@@ -8,8 +8,8 @@ Market intelligence for your AI assistant - algo-trading strategies, analytics a
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Python 3.14+](https://img.shields.io/badge/python-3.14%2B-blue)](https://python.org)
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=rozkoduj&config=eyJ1cmwiOiJodHRwczovL21jcC5yb3prb2R1ai5jb20vbWNwIn0%3D)
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_rozkoduj-0098FF?logo=githubcopilot)](https://insiders.vscode.dev/redirect/mcp/install?name=rozkoduj&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.rozkoduj.com%2Fmcp%22%7D)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=decodetick&config=eyJ1cmwiOiJodHRwczovL21jcC5kZWNvZGV0aWNrLmNvbS9tY3AifQ%3D%3D)
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_decodetick-0098FF?logo=githubcopilot)](https://insiders.vscode.dev/redirect/mcp/install?name=decodetick&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.decodetick.com%2Fmcp%22%7D)
 
 </div>
 
@@ -30,8 +30,8 @@ paid tier adds the deeper knowledge base to research results.
 ```json
 {
   "mcpServers": {
-    "rozkoduj": {
-      "url": "https://mcp.rozkoduj.com/mcp"
+    "decodetick": {
+      "url": "https://mcp.decodetick.com/mcp"
     }
   }
 }
@@ -45,8 +45,8 @@ Click the **Add to Cursor** button above, or add to `~/.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
-    "rozkoduj": {
-      "url": "https://mcp.rozkoduj.com/mcp"
+    "decodetick": {
+      "url": "https://mcp.decodetick.com/mcp"
     }
   }
 }
@@ -59,7 +59,7 @@ Click the **Add to Cursor** button above, or add to `~/.cursor/mcp.json`:
 Click the **Install in VS Code** button above, use the CLI:
 
 ```bash
-code --add-mcp '{"name":"rozkoduj","type":"http","url":"https://mcp.rozkoduj.com/mcp"}'
+code --add-mcp '{"name":"decodetick","type":"http","url":"https://mcp.decodetick.com/mcp"}'
 ```
 
 or add to `.vscode/mcp.json`:
@@ -67,9 +67,9 @@ or add to `.vscode/mcp.json`:
 ```json
 {
   "servers": {
-    "rozkoduj": {
+    "decodetick": {
       "type": "http",
-      "url": "https://mcp.rozkoduj.com/mcp"
+      "url": "https://mcp.decodetick.com/mcp"
     }
   }
 }
@@ -80,7 +80,7 @@ or add to `.vscode/mcp.json`:
 <summary><b>Claude Code</b></summary>
 
 ```bash
-claude mcp add --transport http rozkoduj https://mcp.rozkoduj.com/mcp
+claude mcp add --transport http decodetick https://mcp.decodetick.com/mcp
 ```
 
 Add `--scope user` to enable it in every project.
@@ -92,11 +92,11 @@ Add `--scope user` to enable it in every project.
 **Settings → Connectors → Add custom connector**, then enter:
 
 ```
-https://mcp.rozkoduj.com/mcp
+https://mcp.decodetick.com/mcp
 ```
 
 Connectors are account-level, so the server is available in both the desktop
-app and claude.ai. Sign in with Rozkoduj when prompted, or skip it to use the
+app and claude.ai. Sign in with Decodetick when prompted, or skip it to use the
 anonymous tier.
 </details>
 
@@ -106,10 +106,10 @@ anonymous tier.
 Custom MCP connectors need **Developer mode** (Plus/Pro/Team/Enterprise/Edu):
 
 1. **Settings → Connectors → Advanced** - enable *Developer mode*.
-2. **Settings → Connectors → Create** - name it `Rozkoduj`, set the MCP
-   server URL to `https://mcp.rozkoduj.com/mcp`, pick *OAuth* (or
+2. **Settings → Connectors → Create** - name it `Decodetick`, set the MCP
+   server URL to `https://mcp.decodetick.com/mcp`, pick *OAuth* (or
    *No authentication* for the anonymous tier), and create.
-3. In a chat, open **+ → Developer mode** and toggle Rozkoduj on.
+3. In a chat, open **+ → Developer mode** and toggle Decodetick on.
 </details>
 
 <details>
@@ -183,20 +183,20 @@ Find articles about position sizing and drawdown control.
 
 ## Self-host with your own key
 
-The hosted server at `https://mcp.rozkoduj.com/mcp` authenticates to the data
-API automatically. When you self-host the package, supply your own Rozkoduj API
+The hosted server at `https://mcp.decodetick.com/mcp` authenticates to the data
+API automatically. When you self-host the package, supply your own Decodetick API
 key so calls run as your subscription tier instead of the anonymous tier:
 
-1. Ask for a key at hello@rozkoduj.com (format `rzk_` + 40 hex). It maps to
+1. Ask for a key at contact@decodetick.com (format `dtk_` + 40 hex). It maps to
    your account's tier.
-2. Provide it via the `ROZKODUJ_API_KEY` environment variable - never inline in
-   committed config. In an MCP client, reference it as `${env:ROZKODUJ_API_KEY}`.
+2. Provide it via the `DECODETICK_API_KEY` environment variable - never inline in
+   committed config. In an MCP client, reference it as `${env:DECODETICK_API_KEY}`.
 3. A malformed value is ignored (requests fall back to anonymous); the active
    posture is logged at startup, prefix only - the key is never logged.
 
-Precedence: `ROZKODUJ_API_KEY` (self-host) > anonymous. The hosted server
+Precedence: `DECODETICK_API_KEY` (self-host) > anonymous. The hosted server
 authenticates automatically.
 
 ## License
 
-MIT - [rozkoduj.com](https://rozkoduj.com)
+MIT - [decodetick.com](https://decodetick.com)

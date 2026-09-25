@@ -1,9 +1,9 @@
-"""Tests for rozkoduj_mcp.server lifespan."""
+"""Tests for decodetick_mcp.server lifespan."""
 
 import pytest
 
-from rozkoduj_mcp.server import app_lifespan, mcp
-from rozkoduj_mcp.services import scanner
+from decodetick_mcp.server import app_lifespan, mcp
+from decodetick_mcp.services import scanner
 
 
 class TestAppLifespan:

@@ -1,4 +1,4 @@
-"""Tests for rozkoduj_mcp.iam_client - Google ID token fetcher.
+"""Tests for decodetick_mcp.iam_client - Google ID token fetcher.
 
 The module-global cache makes these tests sensitive to ordering, so every
 test starts from a clean slate via ``iam_client.reset_cache()``. The
@@ -16,7 +16,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import httpx2
 import pytest
 
-from rozkoduj_mcp import iam_client
+from decodetick_mcp import iam_client
 
 # Captured before the package-level autouse fixture replaces _fetch on
 # the module, so the original httpx2 call remains reachable in this file.
@@ -136,7 +136,7 @@ class TestFetch:
         client.__aexit__.return_value = False
         client.get = AsyncMock(return_value=resp)
 
-        with patch("rozkoduj_mcp.iam_client.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.iam_client.httpx2.AsyncClient", return_value=client):
             token = await _REAL_FETCH("https://api.example")
 
         assert token == "id-token-from-metadata"  # noqa: S105
@@ -156,7 +156,7 @@ class TestFetch:
         client.__aexit__.return_value = False
         client.get = AsyncMock(side_effect=httpx2.ConnectError("no metadata server"))
 
-        with patch("rozkoduj_mcp.iam_client.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.iam_client.httpx2.AsyncClient", return_value=client):
             assert await _REAL_FETCH("https://api.example") is None
 
     @pytest.mark.anyio
@@ -169,7 +169,7 @@ class TestFetch:
         client.__aexit__.return_value = False
         client.get = AsyncMock(return_value=resp)
 
-        with patch("rozkoduj_mcp.iam_client.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.iam_client.httpx2.AsyncClient", return_value=client):
             assert await _REAL_FETCH("https://api.example") is None
 
     @pytest.mark.anyio
@@ -183,7 +183,7 @@ class TestFetch:
         client.__aexit__.return_value = False
         client.get = AsyncMock(return_value=resp)
 
-        with patch("rozkoduj_mcp.iam_client.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.iam_client.httpx2.AsyncClient", return_value=client):
             assert await _REAL_FETCH("https://api.example") is None
 
 

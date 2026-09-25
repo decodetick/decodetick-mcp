@@ -77,7 +77,7 @@ class StrategyPage(_Mirror):
 
 class ArticleHit(_Mirror):
     """A passage from a public research article. Cite by linking
-    ``https://www.rozkoduj.com/<locale>/research/<slug>``."""
+    ``https://www.decodetick.com/<locale>/research/<slug>``."""
 
     slug: str
     locale: str

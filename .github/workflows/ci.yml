@@ -53,5 +53,5 @@ jobs:
       # - a file the build reads but the image never copies - passes the whole
       # suite and then fails at deploy, after merge, with production left on the
       # previous revision. Building here moves that failure in front of the merge.
-      - run: docker build -t rozkoduj-mcp:ci .
+      - run: docker build -t decodetick-mcp:ci .
       - run: uv cache prune --ci

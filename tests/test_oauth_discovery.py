@@ -6,8 +6,8 @@ from typing import Any, ClassVar
 import pytest
 from starlette.testclient import TestClient
 
-from rozkoduj_mcp import build_app
-from rozkoduj_mcp.auth import AUDIENCE, ISSUER
+from decodetick_mcp import build_app
+from decodetick_mcp.auth import AUDIENCE, ISSUER
 
 
 # Module-scoped: the session manager only enters its lifespan once per process.
@@ -70,7 +70,7 @@ class TestTransportSecurity:
             json={"jsonrpc": "2.0", "method": "tools/list", "id": 1},
             headers={
                 "Accept": "application/json, text/event-stream",
-                "Host": "mcp.rozkoduj.com",
+                "Host": "mcp.decodetick.com",
             },
         )
         assert resp.status_code == 200

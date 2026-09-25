@@ -1,11 +1,11 @@
-"""Tests for rozkoduj_mcp.tools.instrument (dual-mode: catalog / dossier)."""
+"""Tests for decodetick_mcp.tools.instrument (dual-mode: catalog / dossier)."""
 
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from rozkoduj_mcp.tools.instrument import instrument
+from decodetick_mcp.tools.instrument import instrument
 
 
 def _catalog_result() -> dict[str, Any]:
@@ -57,7 +57,7 @@ def _dossier_result() -> dict[str, Any]:
 
 class TestCatalogMode:
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.instrument.scanner")
+    @patch("decodetick_mcp.tools.instrument.scanner")
     async def test_no_symbol_lists_the_catalog(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.list_instruments = AsyncMock(return_value=_catalog_result())
 
@@ -70,7 +70,7 @@ class TestCatalogMode:
         assert result.total == 512
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.instrument.scanner")
+    @patch("decodetick_mcp.tools.instrument.scanner")
     async def test_catalog_filters_forwarded(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.list_instruments = AsyncMock(return_value=_catalog_result())
 
@@ -83,7 +83,7 @@ class TestCatalogMode:
 
 class TestDossierMode:
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.instrument.scanner")
+    @patch("decodetick_mcp.tools.instrument.scanner")
     async def test_symbol_fetches_the_dossier(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.instrument_details = AsyncMock(return_value=_dossier_result())
 

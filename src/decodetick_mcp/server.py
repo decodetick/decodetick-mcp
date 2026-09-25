@@ -8,9 +8,9 @@ from importlib.metadata import version
 from mcp.server import MCPServer
 from mcp.server.transport_security import TransportSecuritySettings
 
-from rozkoduj_mcp.services import scanner
+from decodetick_mcp.services import scanner
 
-_API_URL = os.environ.get("ROZKODUJ_API_URL", "https://api.rozkoduj.com")
+_API_URL = os.environ.get("DECODETICK_API_URL", "https://api.decodetick.com")
 
 # Host/Origin validation on the streamable-http transport (MCP spec
 # 2025-11-25: invalid Origin MUST be rejected; the SDK answers 403 for a
@@ -25,7 +25,7 @@ _API_URL = os.environ.get("ROZKODUJ_API_URL", "https://api.rozkoduj.com")
 TRANSPORT_SECURITY = TransportSecuritySettings(
     enable_dns_rebinding_protection=True,
     allowed_hosts=[
-        "mcp.rozkoduj.com",
+        "mcp.decodetick.com",
         "rozkoduj-mcp-980145962964.europe-west1.run.app",
         "localhost",
         "localhost:*",
@@ -33,7 +33,7 @@ TRANSPORT_SECURITY = TransportSecuritySettings(
         "127.0.0.1:*",
     ],
     allowed_origins=[
-        "https://mcp.rozkoduj.com",
+        "https://mcp.decodetick.com",
         "http://localhost",
         "http://localhost:*",
         "http://127.0.0.1",
@@ -63,11 +63,11 @@ async def app_lifespan(server: MCPServer[None]) -> AsyncIterator[None]:
 # imported from the package root, which would close an import cycle. Left
 # unset the SDK reports an empty server version to every client.
 mcp = MCPServer(
-    "rozkoduj",
+    "decodetick",
     instructions=(
-        "Rozkoduj's own trading intelligence, mirroring the site's pillars: "
+        "Decodetick's own trading intelligence, mirroring the site's pillars: "
         "'leaderboard' - published, backtested strategies ranked by the "
-        "Rozkoduj Score (filter by family, or by instrument symbol to answer "
+        "Decodetick Score (filter by family, or by instrument symbol to answer "
         "'what works best on AAPL?'); 'strategy' - one strategy's full "
         "dossier with its backtest summary (score, APY as cagr local / "
         "cagr_usd cross-market, max_drawdown, "
@@ -82,7 +82,7 @@ mcp = MCPServer(
 )
 
 # Import tool modules so @mcp.tool() decorators register with the server.
-import rozkoduj_mcp.tools.instrument as _instrument  # noqa: F401, E402
-import rozkoduj_mcp.tools.leaderboard as _leaderboard  # noqa: F401, E402
-import rozkoduj_mcp.tools.research as _research  # noqa: F401, E402
-import rozkoduj_mcp.tools.strategy as _strategy  # noqa: F401, E402
+import decodetick_mcp.tools.instrument as _instrument  # noqa: F401, E402
+import decodetick_mcp.tools.leaderboard as _leaderboard  # noqa: F401, E402
+import decodetick_mcp.tools.research as _research  # noqa: F401, E402
+import decodetick_mcp.tools.strategy as _strategy  # noqa: F401, E402

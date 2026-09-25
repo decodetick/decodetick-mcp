@@ -28,7 +28,7 @@ Symbol = Annotated[
     Field(min_length=1, max_length=20, pattern=r"^[A-Za-z0-9][A-Za-z0-9-]*$"),
 ]
 
-# All rozkoduj tools are read-only queries against Rozkoduj's own bounded
+# All decodetick tools are read-only queries against Decodetick's own bounded
 # corpus (strategy catalog, research, knowledge base) - a closed domain, not the
 # open web or third-party services, so openWorldHint is False. idempotentHint
 # is omitted deliberately: the spec defines it as meaningful only when

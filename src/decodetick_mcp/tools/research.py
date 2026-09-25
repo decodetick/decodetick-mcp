@@ -4,10 +4,10 @@ from typing import Annotated, Literal
 
 from pydantic import Field
 
-from rozkoduj_mcp.server import mcp
-from rozkoduj_mcp.services import scanner
-from rozkoduj_mcp.tools import TOOL_ANNOTATIONS, SearchQuery
-from rozkoduj_mcp.tools.models import ResearchResult
+from decodetick_mcp.server import mcp
+from decodetick_mcp.services import scanner
+from decodetick_mcp.tools import TOOL_ANNOTATIONS, SearchQuery
+from decodetick_mcp.tools.models import ResearchResult
 
 
 @mcp.tool(title="Research and knowledge search", annotations=TOOL_ANNOTATIONS)
@@ -24,7 +24,7 @@ async def research(
 
     Returns two ranked lists of passages:
     - `articles` (public): each hit carries `slug` + `locale` - cite by
-      linking `https://www.rozkoduj.com/<locale>/research/<slug>` - plus
+      linking `https://www.decodetick.com/<locale>/research/<slug>` - plus
       `title`, `chunk_text`, and `parent_text` for wider context.
     - `knowledge` (deeper corpus): joins automatically for signed-in paid
       tiers. When it was skipped, the response carries `locked` with an

@@ -6,8 +6,8 @@ import pytest
 import uvicorn
 from starlette.applications import Starlette
 
-import rozkoduj_mcp
-import rozkoduj_mcp.server
+import decodetick_mcp
+import decodetick_mcp.server
 
 
 class TestMainDispatch:
@@ -15,12 +15,12 @@ class TestMainDispatch:
         monkeypatch.delenv("MCP_TRANSPORT", raising=False)
         transports: list[str] = []
         monkeypatch.setattr(
-            rozkoduj_mcp.server.mcp,
+            decodetick_mcp.server.mcp,
             "run",
             lambda transport: transports.append(transport),
         )
 
-        rozkoduj_mcp.main()
+        decodetick_mcp.main()
 
         assert transports == ["stdio"]
 
@@ -29,16 +29,16 @@ class TestMainDispatch:
     ) -> None:
         monkeypatch.setenv("MCP_TRANSPORT", "streamable-http")
         started: list[bool] = []
-        monkeypatch.setattr(rozkoduj_mcp, "_run_http", lambda: started.append(True))
+        monkeypatch.setattr(decodetick_mcp, "_run_http", lambda: started.append(True))
 
-        rozkoduj_mcp.main()
+        decodetick_mcp.main()
 
         assert started == [True]
 
     def test_unknown_transport_rejected(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("MCP_TRANSPORT", "websocket")
         with pytest.raises(ValueError, match="MCP_TRANSPORT"):
-            rozkoduj_mcp.main()
+            decodetick_mcp.main()
 
 
 class TestRunHttp:
@@ -52,7 +52,7 @@ class TestRunHttp:
 
         monkeypatch.setattr(uvicorn, "run", fake_run)
 
-        rozkoduj_mcp._run_http()
+        decodetick_mcp._run_http()
 
         assert isinstance(captured["app"], Starlette)
         assert captured["host"] == "0.0.0.0"
@@ -69,7 +69,7 @@ class TestRunHttp:
 
         monkeypatch.setattr(uvicorn, "run", fake_run)
 
-        rozkoduj_mcp._run_http()
+        decodetick_mcp._run_http()
 
         assert captured["host"] == "127.0.0.1"
         assert captured["port"] == 9000

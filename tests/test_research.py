@@ -1,11 +1,11 @@
-"""Tests for rozkoduj_mcp.tools.research."""
+"""Tests for decodetick_mcp.tools.research."""
 
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from rozkoduj_mcp.tools.research import research
+from decodetick_mcp.tools.research import research
 
 
 def _mock_result(*, locked: bool) -> dict[str, Any]:
@@ -39,7 +39,7 @@ def _mock_result(*, locked: bool) -> dict[str, Any]:
             {
                 "fields": ["knowledge"],
                 "required_tier": "pro",
-                "unlock_url": "https://www.rozkoduj.com/login",
+                "unlock_url": "https://www.decodetick.com/login",
                 "reason": "sign in to include it",
             }
             if locked
@@ -50,7 +50,7 @@ def _mock_result(*, locked: bool) -> dict[str, Any]:
 
 class TestResearch:
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.research.scanner")
+    @patch("decodetick_mcp.tools.research.scanner")
     async def test_returns_both_corpora_when_entitled(
         self, mock_scanner: AsyncMock
     ) -> None:
@@ -68,7 +68,7 @@ class TestResearch:
         assert result.locked is None
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.research.scanner")
+    @patch("decodetick_mcp.tools.research.scanner")
     async def test_anonymous_gets_articles_plus_locked_hint(
         self, mock_scanner: AsyncMock
     ) -> None:

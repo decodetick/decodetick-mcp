@@ -10,7 +10,7 @@ from typing import Any
 
 import pytest
 
-from rozkoduj_mcp.server import mcp
+from decodetick_mcp.server import mcp
 
 
 async def _schemas() -> dict[str, dict[str, Any]]:

@@ -4,10 +4,10 @@ from typing import Annotated, Literal
 
 from pydantic import Field
 
-from rozkoduj_mcp.server import mcp
-from rozkoduj_mcp.services import scanner
-from rozkoduj_mcp.tools import TOOL_ANNOTATIONS, Symbol
-from rozkoduj_mcp.tools.models import StrategyPage
+from decodetick_mcp.server import mcp
+from decodetick_mcp.services import scanner
+from decodetick_mcp.tools import TOOL_ANNOTATIONS, Symbol
+from decodetick_mcp.tools.models import StrategyPage
 
 # Family slugs mirror the API bound exactly - anything looser 422s upstream.
 FamilySlug = Annotated[str, Field(max_length=64, pattern=r"^[A-Za-z0-9_-]+$")]
@@ -36,7 +36,7 @@ async def leaderboard(
     by fetching a page and reading `unit_risk_band`, never by inventing a
     parameter.
 
-    Sorting: `score_desc` (default) ranks by the Rozkoduj Score - the
+    Sorting: `score_desc` (default) ranks by the Decodetick Score - the
     headline leaderboard axis; `apy_desc` ranks by annualised return in USD
     (`cagr_usd` - the cross-market canon, immune to weak-currency inflation;
     local `cagr` is the fallback); `recent` is newest first.
@@ -46,7 +46,7 @@ async def leaderboard(
     metrics: `listing_slug` (the instrument the metrics were earned on),
     `cagr` (APY in the instrument's local currency), `cagr_usd` (APY in USD -
     use this whenever comparing across markets), `max_drawdown`,
-    `win_rate_pct`, `num_trades`, `rozkoduj_score`, `rozkoduj_band`, the risk
+    `win_rate_pct`, `num_trades`, `decodetick_score`, `decodetick_band`, the risk
     mode (`unit_risk_band`, `unit_risk_score`), and a `sparkline`.
 
     For one strategy's full dossier use `strategy`.

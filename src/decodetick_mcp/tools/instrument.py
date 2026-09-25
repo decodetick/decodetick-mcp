@@ -4,10 +4,10 @@ from typing import Annotated
 
 from pydantic import Field
 
-from rozkoduj_mcp.server import mcp
-from rozkoduj_mcp.services import scanner
-from rozkoduj_mcp.tools import TOOL_ANNOTATIONS, Symbol
-from rozkoduj_mcp.tools.models import InstrumentResult
+from decodetick_mcp.server import mcp
+from decodetick_mcp.services import scanner
+from decodetick_mcp.tools import TOOL_ANNOTATIONS, Symbol
+from decodetick_mcp.tools.models import InstrumentResult
 
 # Catalog facet values are lowercase slugs (equity, crypto, live, ...).
 Facet = Annotated[str, Field(min_length=1, max_length=32, pattern=r"^[a-z_]+$")]

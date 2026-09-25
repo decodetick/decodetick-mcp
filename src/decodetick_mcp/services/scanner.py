@@ -1,4 +1,4 @@
-"""Async client for the rozkoduj data API.
+"""Async client for the decodetick data API.
 
 Outbound calls authenticate with a service-identity token. End-user
 identity extracted from the inbound MCP JWT is propagated through
@@ -14,14 +14,14 @@ from typing import Any
 
 import httpx2
 
-from rozkoduj_mcp import iam_client
-from rozkoduj_mcp.auth import (
+from decodetick_mcp import iam_client
+from decodetick_mcp.auth import (
     current_client_ip,
     current_user_id,
     current_user_scopes,
     current_user_tier,
 )
-from rozkoduj_mcp.logging import current_trace_header
+from decodetick_mcp.logging import current_trace_header
 
 # Managed by server / HTTP lifespan - created on startup, closed on shutdown.
 client: httpx2.AsyncClient | None = None
@@ -38,20 +38,20 @@ _TRANSPORT_RETRIES = 2
 
 logger = logging.getLogger(__name__)
 
-# A Rozkoduj API key is ``rzk_`` followed by 40 hex chars (44 chars total).
-_API_KEY_RE = re.compile(r"\Arzk_[0-9a-f]{40}\Z")
+# A Decodetick API key is ``dtk_`` followed by 40 hex chars (44 chars total).
+_API_KEY_RE = re.compile(r"\Adtk_[0-9a-f]{40}\Z")
 
 
 def _self_host_credential() -> str | None:
     """The configured self-host API key, when well-formed - else ``None``.
 
     Off-platform deployments authenticate to the data API with a
-    Rozkoduj-issued ``rzk_`` key in ``ROZKODUJ_API_KEY``. A malformed value is
+    Decodetick-issued ``dtk_`` key in ``DECODETICK_API_KEY``. A malformed value is
     treated as absent rather than sent as a bearer that would only be rejected; the
     malformed case is surfaced loudly once at startup (see
     :func:`log_self_host_status`), so the hot path stays quiet.
     """
-    key = os.environ.get("ROZKODUJ_API_KEY")
+    key = os.environ.get("DECODETICK_API_KEY")
     if key and _API_KEY_RE.match(key):
         return key
     return None
@@ -62,10 +62,10 @@ def log_self_host_status() -> None:
 
     Outbound mode is environment-determined: on Cloud Run the IAM
     service-identity token is used; off-platform a well-formed
-    ``ROZKODUJ_API_KEY`` is the fallback. Logs which is configured (prefix
+    ``DECODETICK_API_KEY`` is the fallback. Logs which is configured (prefix
     only) so an operator can see why requests authenticate the way they do.
     """
-    key = os.environ.get("ROZKODUJ_API_KEY")
+    key = os.environ.get("DECODETICK_API_KEY")
     if not key:
         logger.info("outbound_auth: self-host key absent (IAM or anonymous)")
         return
@@ -73,7 +73,7 @@ def log_self_host_status() -> None:
         logger.info("outbound_auth: self-host key configured (prefix=%s)", key[:12])
     else:
         logger.warning(
-            "outbound_auth: self-host key malformed (expected rzk_ + 40 hex); ignoring"
+            "outbound_auth: self-host key malformed (expected dtk_ + 40 hex); ignoring"
         )
 
 
@@ -222,7 +222,7 @@ async def list_strategies(
     limit: int = 20,
     offset: int = 0,
 ) -> dict[str, Any]:
-    """List Rozkoduj's published strategies.
+    """List Decodetick's published strategies.
 
     Publication scope is fixed upstream, so there is no visibility argument to
     forward.
@@ -241,7 +241,7 @@ async def list_strategies(
 
 
 async def strategy_details(identifier: str) -> dict[str, Any]:
-    """Fetch single Rozkoduj strategy by slug or algorithm_uid."""
+    """Fetch single Decodetick strategy by slug or algorithm_uid."""
     return await _get(f"/strategies/{identifier}", f"strategy {identifier}")
 
 

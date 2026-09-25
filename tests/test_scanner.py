@@ -1,4 +1,4 @@
-"""Tests for rozkoduj_mcp.services.scanner (API client)."""
+"""Tests for decodetick_mcp.services.scanner (API client)."""
 
 import logging
 from typing import Any
@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import httpx2
 import pytest
 
-from rozkoduj_mcp.services import scanner as scanner_mod
-from rozkoduj_mcp.services.scanner import (
+from decodetick_mcp.services import scanner as scanner_mod
+from decodetick_mcp.services.scanner import (
     _get_client,
     _get_semaphore,
     close_client,
@@ -95,7 +95,7 @@ class TestPostErrorPaths:
     """The shared _post() error handling, exercised through search_research."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_connect_error_raises_runtime(self, mock_client: AsyncMock) -> None:
         mock_client.post = AsyncMock(side_effect=httpx2.ConnectError("timeout"))
 
@@ -103,7 +103,7 @@ class TestPostErrorPaths:
             await search_research(query="momentum")
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_429_surfaces_rate_limit_with_retry_after(
         self, mock_client: AsyncMock
     ) -> None:
@@ -113,7 +113,7 @@ class TestPostErrorPaths:
             await search_research(query="momentum")
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_429_without_retry_after_falls_back(
         self, mock_client: AsyncMock
     ) -> None:
@@ -123,7 +123,7 @@ class TestPostErrorPaths:
             await search_research(query="momentum")
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_non_429_status_error_raises_generic(
         self, mock_client: AsyncMock
     ) -> None:
@@ -137,7 +137,7 @@ class TestGetErrorPaths:
     """The shared _get() error handling, exercised through list_strategies."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_connect_error_raises_runtime(self, mock_client: AsyncMock) -> None:
         mock_client.get = AsyncMock(side_effect=httpx2.ConnectError("timeout"))
 
@@ -145,7 +145,7 @@ class TestGetErrorPaths:
             await list_strategies()
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_429_surfaces_rate_limit_with_retry_after(
         self, mock_client: AsyncMock
     ) -> None:
@@ -155,7 +155,7 @@ class TestGetErrorPaths:
             await list_strategies()
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_non_429_status_error_raises_generic(
         self, mock_client: AsyncMock
     ) -> None:
@@ -165,10 +165,10 @@ class TestGetErrorPaths:
             await list_strategies()
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_404_surfaces_not_found(self, mock_client: AsyncMock) -> None:
         # A 404 must read as "not found" (a bad slug), not as a backend outage.
-        from rozkoduj_mcp.services.scanner import strategy_details
+        from decodetick_mcp.services.scanner import strategy_details
 
         mock_client.get = AsyncMock(return_value=_mock_status_error_response(404))
 
@@ -180,7 +180,7 @@ class TestListStrategies:
     """Tests for list_strategies()."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_sends_params(self, mock_client: AsyncMock) -> None:
         mock_client.get = AsyncMock(
             return_value=_mock_response({"items": [], "total": 0})
@@ -198,7 +198,7 @@ class TestListStrategies:
         assert "symbol" not in params
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_family_included_when_set(self, mock_client: AsyncMock) -> None:
         mock_client.get = AsyncMock(
             return_value=_mock_response({"items": [], "total": 0})
@@ -210,7 +210,7 @@ class TestListStrategies:
         assert params["family"] == "ma_cross"
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_symbol_included_when_set(self, mock_client: AsyncMock) -> None:
         mock_client.get = AsyncMock(
             return_value=_mock_response({"items": [], "total": 0})
@@ -226,9 +226,9 @@ class TestStrategyDetails:
     """Tests for strategy_details()."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_calls_correct_path(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import strategy_details
+        from decodetick_mcp.services.scanner import strategy_details
 
         mock_client.get = AsyncMock(
             return_value=_mock_response({"slug": "ma-cross-ema"})
@@ -244,7 +244,7 @@ class TestSearchResearch:
     """Tests for search_research()."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_sends_payload_to_research_endpoint(
         self, mock_client: AsyncMock
     ) -> None:
@@ -262,7 +262,7 @@ class TestSearchResearch:
         assert payload["limit"] == 3
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_locale_omitted_when_none(self, mock_client: AsyncMock) -> None:
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "articles": [], "knowledge": []})
@@ -278,9 +278,9 @@ class TestInstruments:
     """Tests for list_instruments() / instrument_details()."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_catalog_sends_only_set_filters(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import list_instruments
+        from decodetick_mcp.services.scanner import list_instruments
 
         mock_client.get = AsyncMock(
             return_value=_mock_response({"items": [], "total": 0})
@@ -295,9 +295,9 @@ class TestInstruments:
         assert "status" not in params
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_catalog_status_filter(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import list_instruments
+        from decodetick_mcp.services.scanner import list_instruments
 
         mock_client.get = AsyncMock(
             return_value=_mock_response({"items": [], "total": 0})
@@ -308,9 +308,9 @@ class TestInstruments:
         assert mock_client.get.call_args[1]["params"]["status"] == "live"
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_dossier_calls_symbol_path(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import instrument_details
+        from decodetick_mcp.services.scanner import instrument_details
 
         mock_client.get = AsyncMock(
             return_value=_mock_response({"listing_slug": "aapl-us"})
@@ -325,18 +325,18 @@ class TestOutboundHeaders:
     """Outbound auth/identity header behaviour, exercised through search_research()."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_uses_iam_token_and_user_identity_headers(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp import iam_client
-        from rozkoduj_mcp.auth import (
+        from decodetick_mcp import iam_client
+        from decodetick_mcp.auth import (
             current_user_id,
             current_user_scopes,
             current_user_tier,
         )
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -365,31 +365,31 @@ class TestOutboundHeaders:
         assert headers["X-User-Scopes"] == "mcp:read mcp:knowledge:read"
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_sends_no_auth_when_nothing_available(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
         )
 
-        with patch.dict("os.environ", {"ROZKODUJ_API_KEY": ""}):
+        with patch.dict("os.environ", {"DECODETICK_API_KEY": ""}):
             await search_research(query="x")
 
         assert mock_client.post.call_args[1]["headers"] == {}
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_omits_tier_header_when_claim_absent(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp import iam_client
-        from rozkoduj_mcp.auth import current_user_id
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp import iam_client
+        from decodetick_mcp.auth import current_user_id
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -410,13 +410,13 @@ class TestOutboundHeaders:
         assert "X-User-Tier" not in headers
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_forwards_client_ip_header(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp.auth import current_client_ip
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.auth import current_client_ip
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -431,12 +431,12 @@ class TestOutboundHeaders:
         assert headers["X-Client-Ip"] == "203.0.113.7"
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_omits_client_ip_header_when_unset(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -447,7 +447,7 @@ class TestOutboundHeaders:
         assert "X-Client-Ip" not in mock_client.post.call_args[1]["headers"]
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_forwards_trace_header_to_api(
         self,
         mock_client: AsyncMock,
@@ -455,8 +455,8 @@ class TestOutboundHeaders:
         """The inbound trace header is propagated on the outbound call so the
         entries correlate under one trace id.
         """
-        from rozkoduj_mcp.logging import current_trace_header
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.logging import current_trace_header
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -473,24 +473,24 @@ class TestOutboundHeaders:
 
 
 class TestSelfHostApiKey:
-    """Outbound auth falls back to ROZKODUJ_API_KEY when no IAM token is
+    """Outbound auth falls back to DECODETICK_API_KEY when no IAM token is
     available (self-hosted deployments off Cloud Run)."""
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_falls_back_to_api_key_when_no_iam_token(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp import iam_client
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp import iam_client
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
         )
         with (
             patch.object(iam_client, "_fetch", new=AsyncMock(return_value=None)),
-            patch.dict("os.environ", {"ROZKODUJ_API_KEY": "rzk_" + "a" * 40}),
+            patch.dict("os.environ", {"DECODETICK_API_KEY": "dtk_" + "a" * 40}),
         ):
             iam_client.reset_cache()
             try:
@@ -499,16 +499,16 @@ class TestSelfHostApiKey:
                 iam_client.reset_cache()
 
         headers = mock_client.post.call_args[1]["headers"]
-        assert headers["Authorization"] == "Bearer " + "rzk_" + "a" * 40
+        assert headers["Authorization"] == "Bearer " + "dtk_" + "a" * 40
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_iam_token_takes_precedence_over_api_key(
         self,
         mock_client: AsyncMock,
     ) -> None:
-        from rozkoduj_mcp import iam_client
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp import iam_client
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -518,7 +518,7 @@ class TestSelfHostApiKey:
             # Must be a well-formed key: a malformed one is rejected by the
             # format check before precedence is ever consulted, so the test
             # would pass with the two credentials in either order.
-            patch.dict("os.environ", {"ROZKODUJ_API_KEY": "rzk_" + "b" * 40}),
+            patch.dict("os.environ", {"DECODETICK_API_KEY": "dtk_" + "b" * 40}),
         ):
             iam_client.reset_cache()
             try:
@@ -535,10 +535,10 @@ class TestPerTierForwarding:
 
     @pytest.mark.anyio
     @pytest.mark.parametrize("tier", ["free", "pro"])
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_forwards_user_tier(self, mock_client: AsyncMock, tier: str) -> None:
-        from rozkoduj_mcp.auth import current_user_id, current_user_tier
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.auth import current_user_id, current_user_tier
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
@@ -554,42 +554,42 @@ class TestPerTierForwarding:
         assert mock_client.post.call_args[1]["headers"]["X-User-Tier"] == tier
 
 
-_VALID_KEY = "rzk_" + "a" * 40  # rzk_ + 40 hex = 44 chars
+_VALID_KEY = "dtk_" + "a" * 40  # dtk_ + 40 hex = 44 chars
 
 
 class TestSelfHostCredential:
     def test_valid_key_accepted(self) -> None:
-        from rozkoduj_mcp.services.scanner import _self_host_credential
+        from decodetick_mcp.services.scanner import _self_host_credential
 
-        with patch.dict("os.environ", {"ROZKODUJ_API_KEY": _VALID_KEY}):
+        with patch.dict("os.environ", {"DECODETICK_API_KEY": _VALID_KEY}):
             assert _self_host_credential() == _VALID_KEY
 
     def test_malformed_key_rejected(self) -> None:
-        from rozkoduj_mcp.services.scanner import _self_host_credential
+        from decodetick_mcp.services.scanner import _self_host_credential
 
-        with patch.dict("os.environ", {"ROZKODUJ_API_KEY": "rzk_short"}):
+        with patch.dict("os.environ", {"DECODETICK_API_KEY": "dtk_short"}):
             assert _self_host_credential() is None
 
     def test_absent_key_returns_none(self) -> None:
-        from rozkoduj_mcp.services.scanner import _self_host_credential
+        from decodetick_mcp.services.scanner import _self_host_credential
 
         with patch.dict("os.environ", {}, clear=True):
             assert _self_host_credential() is None
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_malformed_key_sends_no_auth_header(
         self, mock_client: AsyncMock
     ) -> None:
-        from rozkoduj_mcp import iam_client
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp import iam_client
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "q", "items": []})
         )
         with (
             patch.object(iam_client, "_fetch", new=AsyncMock(return_value=None)),
-            patch.dict("os.environ", {"ROZKODUJ_API_KEY": "not-a-valid-key"}),
+            patch.dict("os.environ", {"DECODETICK_API_KEY": "not-a-valid-key"}),
         ):
             iam_client.reset_cache()
             try:
@@ -603,7 +603,7 @@ class TestSelfHostCredential:
 
 class TestLogSelfHostStatus:
     def test_logs_absent(self, caplog: pytest.LogCaptureFixture) -> None:
-        from rozkoduj_mcp.services.scanner import log_self_host_status
+        from decodetick_mcp.services.scanner import log_self_host_status
 
         with patch.dict("os.environ", {}, clear=True), caplog.at_level(logging.INFO):
             log_self_host_status()
@@ -612,11 +612,11 @@ class TestLogSelfHostStatus:
     def test_logs_configured_prefix_not_secret(
         self, caplog: pytest.LogCaptureFixture
     ) -> None:
-        from rozkoduj_mcp.services.scanner import log_self_host_status
+        from decodetick_mcp.services.scanner import log_self_host_status
 
-        key = "rzk_" + "b" * 40
+        key = "dtk_" + "b" * 40
         with (
-            patch.dict("os.environ", {"ROZKODUJ_API_KEY": key}),
+            patch.dict("os.environ", {"DECODETICK_API_KEY": key}),
             caplog.at_level(logging.INFO),
         ):
             log_self_host_status()
@@ -625,10 +625,10 @@ class TestLogSelfHostStatus:
         assert key[:12] in caplog.text  # 12-char prefix is fine
 
     def test_logs_malformed_warning(self, caplog: pytest.LogCaptureFixture) -> None:
-        from rozkoduj_mcp.services.scanner import log_self_host_status
+        from decodetick_mcp.services.scanner import log_self_host_status
 
         with (
-            patch.dict("os.environ", {"ROZKODUJ_API_KEY": "rzk_bad"}),
+            patch.dict("os.environ", {"DECODETICK_API_KEY": "dtk_bad"}),
             caplog.at_level(logging.WARNING),
         ):
             log_self_host_status()
@@ -646,18 +646,18 @@ class TestUnexpectedResponseShape:
     """
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_get_refuses_a_list_body(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import strategy_details
+        from decodetick_mcp.services.scanner import strategy_details
 
         mock_client.get = AsyncMock(return_value=_mock_response([{"name": "trend"}]))
         with pytest.raises(RuntimeError, match="Unexpected response shape"):
             await strategy_details("families")
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_post_refuses_a_list_body(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response(["not", "an", "object"])
@@ -666,9 +666,9 @@ class TestUnexpectedResponseShape:
             await search_research(query="x")
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.services.scanner.client")
+    @patch("decodetick_mcp.services.scanner.client")
     async def test_an_object_body_still_passes(self, mock_client: AsyncMock) -> None:
-        from rozkoduj_mcp.services.scanner import search_research
+        from decodetick_mcp.services.scanner import search_research
 
         mock_client.post = AsyncMock(
             return_value=_mock_response({"query": "x", "items": []})

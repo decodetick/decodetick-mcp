@@ -1,4 +1,4 @@
-"""Tests for rozkoduj_mcp.logging (structured request logging middleware)."""
+"""Tests for decodetick_mcp.logging (structured request logging middleware)."""
 
 import json
 
@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Route
 from starlette.testclient import TestClient
 
-from rozkoduj_mcp.logging import (
+from decodetick_mcp.logging import (
     RequestLoggingMiddleware,
     _forwardable,
     current_trace_header,

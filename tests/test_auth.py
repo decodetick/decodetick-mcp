@@ -1,4 +1,4 @@
-"""Tests for rozkoduj_mcp.auth - JWKS-based JWT verification."""
+"""Tests for decodetick_mcp.auth - JWKS-based JWT verification."""
 
 import base64
 import logging
@@ -11,7 +11,7 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from rozkoduj_mcp.auth import (
+from decodetick_mcp.auth import (
     AUDIENCE,
     ISSUER,
     JWKS_URI,
@@ -293,7 +293,7 @@ class TestJWKSRefreshCooldown:
         client = _mock_jwks_client(jwk)
         rogue = _sign(private, kid="unknown-kid")
 
-        with patch("rozkoduj_mcp.auth.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.auth.httpx2.AsyncClient", return_value=client):
             assert await verifier.verify_token(rogue) is None
             assert await verifier.verify_token(rogue) is None
 
@@ -310,7 +310,7 @@ class TestJWKSRefreshCooldown:
         # retry, which must not fetch again while the cooldown is running.
         forged = _sign(Ed25519PrivateKey.generate())
 
-        with patch("rozkoduj_mcp.auth.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.auth.httpx2.AsyncClient", return_value=client):
             assert await verifier.verify_token(forged) is None
             assert await verifier.verify_token(forged) is None
 
@@ -329,7 +329,7 @@ class TestJWKSRefreshCooldown:
         client = _mock_jwks_client(jwk)
         rogue = _sign(private, kid="unknown-kid")
 
-        with patch("rozkoduj_mcp.auth.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.auth.httpx2.AsyncClient", return_value=client):
             assert await verifier.verify_token(rogue) is None
             verifier._jwks_attempted_at = time.monotonic() - 31
             assert await verifier.verify_token(rogue) is None
@@ -353,7 +353,7 @@ class TestTokenRejectionLogging:
         verifier = _make_verifier(jwk)
         token = _sign(private, expires_in=-120)
 
-        with caplog.at_level(_logging.WARNING, logger="rozkoduj_mcp.auth"):
+        with caplog.at_level(_logging.WARNING, logger="decodetick_mcp.auth"):
             assert await verifier.verify_token(token) is None
 
         rejected = [r for r in caplog.records if r.getMessage() == "token_rejected"]
@@ -376,7 +376,7 @@ class TestTokenRejectionLogging:
 
         with (
             patch.object(JWKSTokenVerifier, "_refresh_jwks", new=AsyncMock()),
-            caplog.at_level(_logging.WARNING, logger="rozkoduj_mcp.auth"),
+            caplog.at_level(_logging.WARNING, logger="decodetick_mcp.auth"),
         ):
             verifier._jwks_keys = {}
             assert await verifier.verify_token(token) is None
@@ -404,7 +404,7 @@ class TestJWKSFetch:
         client.__aexit__.return_value = False
         client.get = AsyncMock(return_value=resp)
 
-        with patch("rozkoduj_mcp.auth.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.auth.httpx2.AsyncClient", return_value=client):
             result = await verifier.verify_token(_sign(private))
         assert result is not None
         assert verifier._jwks_keys[_KID]["kid"] == _KID
@@ -423,7 +423,7 @@ class TestJWKSFetch:
         client.__aexit__.return_value = False
         client.get = AsyncMock(side_effect=_httpx.ConnectError("boom"))
 
-        with patch("rozkoduj_mcp.auth.httpx2.AsyncClient", return_value=client):
+        with patch("decodetick_mcp.auth.httpx2.AsyncClient", return_value=client):
             # Use a valid-shaped JWT that requires JWKS lookup.
             private = Ed25519PrivateKey.generate()
             assert await verifier.verify_token(_sign(private)) is None
@@ -496,7 +496,7 @@ class TestJWTAuthContextMiddleware:
 
     @pytest.mark.anyio
     async def test_anonymous_request_calls_through_without_touching_jwt(self) -> None:
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware
+        from decodetick_mcp.auth import JWTAuthContextMiddleware
 
         verifier = MagicMock()
         verifier.verify_token = AsyncMock()
@@ -511,7 +511,7 @@ class TestJWTAuthContextMiddleware:
 
     @pytest.mark.anyio
     async def test_bearer_header_triggers_verification(self) -> None:
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware
+        from decodetick_mcp.auth import JWTAuthContextMiddleware
 
         verifier = MagicMock()
         verifier.verify_token = AsyncMock(return_value=MagicMock())
@@ -530,7 +530,7 @@ class TestJWTAuthContextMiddleware:
     async def test_rejected_bearer_short_circuits_with_401(self) -> None:
         """A presented-and-rejected bearer must never silently degrade to
         anon - it gets the RFC 9728 challenge and the app is not called."""
-        from rozkoduj_mcp.auth import RESOURCE_METADATA_URL, JWTAuthContextMiddleware
+        from decodetick_mcp.auth import RESOURCE_METADATA_URL, JWTAuthContextMiddleware
 
         verifier = MagicMock()
         verifier.verify_token = AsyncMock(return_value=None)
@@ -557,7 +557,7 @@ class TestJWTAuthContextMiddleware:
     async def test_rejected_bearer_on_exempt_path_passes_through(self) -> None:
         """Discovery/health paths must stay reachable with a broken bearer -
         RFC 9728 metadata cannot sit behind the challenge that points at it."""
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware
+        from decodetick_mcp.auth import JWTAuthContextMiddleware
 
         verifier = MagicMock()
         verifier.verify_token = AsyncMock(return_value=None)
@@ -572,7 +572,7 @@ class TestJWTAuthContextMiddleware:
 
     @pytest.mark.anyio
     async def test_non_bearer_authorization_is_ignored(self) -> None:
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware
+        from decodetick_mcp.auth import JWTAuthContextMiddleware
 
         verifier = MagicMock()
         verifier.verify_token = AsyncMock()
@@ -589,7 +589,7 @@ class TestJWTAuthContextMiddleware:
 
     @pytest.mark.anyio
     async def test_non_http_scope_passes_through(self) -> None:
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware
+        from decodetick_mcp.auth import JWTAuthContextMiddleware
 
         verifier = MagicMock()
         verifier.verify_token = AsyncMock()
@@ -605,7 +605,7 @@ class TestJWTAuthContextMiddleware:
     async def test_identity_cleared_after_request(self) -> None:
         """Identity must reset to the anonymous default once the request
         finishes so it can never bleed into a later reused context."""
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware
+        from decodetick_mcp.auth import JWTAuthContextMiddleware
 
         async def _bind(_token: str) -> Any:
             current_user_id.set("user-1")
@@ -630,7 +630,7 @@ class TestJWTAuthContextMiddleware:
     ) -> str:
         """Run a request through the middleware and capture the client-IP
         ContextVar as the downstream app sees it."""
-        from rozkoduj_mcp.auth import JWTAuthContextMiddleware, current_client_ip
+        from decodetick_mcp.auth import JWTAuthContextMiddleware, current_client_ip
 
         captured: dict[str, str] = {}
 
@@ -676,10 +676,10 @@ class TestJWTAuthContextMiddleware:
 def test_issuer_pinned_to_canonical_www_origin() -> None:
     """Production issuer must be the www origin the AS is actually served at
     (apex 307-redirects, which OAuth/JWKS clients will not follow)."""
-    from rozkoduj_mcp.auth import ISSUER, JWKS_URI
+    from decodetick_mcp.auth import ISSUER, JWKS_URI
 
-    assert ISSUER == "https://www.rozkoduj.com/api/auth"
-    assert JWKS_URI == "https://www.rozkoduj.com/api/auth/jwks"
+    assert ISSUER == "https://www.decodetick.com/api/auth"
+    assert JWKS_URI == "https://www.decodetick.com/api/auth/jwks"
 
 
 class TestNormalizeTier:

@@ -4,10 +4,10 @@ from typing import Annotated
 
 from pydantic import Field
 
-from rozkoduj_mcp.server import mcp
-from rozkoduj_mcp.services import scanner
-from rozkoduj_mcp.tools import TOOL_ANNOTATIONS
-from rozkoduj_mcp.tools.models import Strategy
+from decodetick_mcp.server import mcp
+from decodetick_mcp.services import scanner
+from decodetick_mcp.tools import TOOL_ANNOTATIONS
+from decodetick_mcp.tools.models import Strategy
 
 # Slug / ULID characters only. The identifier is interpolated into the
 # upstream request path, so the pattern also keeps it path-safe.
@@ -21,7 +21,7 @@ async def strategy(identifier: StrategyId) -> Strategy:
     `identifier` is either the URL slug (e.g. `ma-crossover`) or the
     `algorithm_uid` (ULID, e.g. `01J7...`). Returns i18n names/descriptions,
     family/variant/version metadata and the `best_run` backtest summary:
-    `rozkoduj_score`/`rozkoduj_band` (ranking axis), `cagr` (APY in the
+    `decodetick_score`/`decodetick_band` (ranking axis), `cagr` (APY in the
     instrument's local currency), `cagr_usd` (APY in USD - the cross-market
     canon), `max_drawdown`, `win_rate_pct`, `num_trades`, the risk mode
     (`unit_risk_band`, `unit_risk_score`), plus `sparkline`, `params_public`,

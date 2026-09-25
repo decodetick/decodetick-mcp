@@ -48,12 +48,12 @@ _ACCEPTED_ALGS = ["EdDSA"]
 
 # Production OAuth wiring. One AS, one RS - so the URLs live in code as
 # constants rather than env vars. Changing the AS means a code change here.
-ISSUER = "https://www.rozkoduj.com/api/auth"
-AUDIENCE = "https://mcp.rozkoduj.com/mcp"
+ISSUER = "https://www.decodetick.com/api/auth"
+AUDIENCE = "https://mcp.decodetick.com/mcp"
 JWKS_URI = f"{ISSUER}/jwks"
 # RFC 9728 path-insertion form for the /mcp resource.
 RESOURCE_METADATA_URL = (
-    "https://mcp.rozkoduj.com/.well-known/oauth-protected-resource/mcp"
+    "https://mcp.decodetick.com/.well-known/oauth-protected-resource/mcp"
 )
 
 # Paths that must stay reachable without (or with a broken) bearer: health

@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from rozkoduj_mcp import iam_client
-from rozkoduj_mcp.services import scanner
+from decodetick_mcp import iam_client
+from decodetick_mcp.services import scanner
 
 
 @pytest.fixture(autouse=True)

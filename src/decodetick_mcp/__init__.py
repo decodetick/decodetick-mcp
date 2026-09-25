@@ -1,4 +1,4 @@
-"""decodetick-mcp: MCP server for Rozkoduj's published trading strategies and knowledge base."""
+"""decodetick-mcp: MCP server for Decodetick's published trading strategies and knowledge base."""
 
 import contextlib
 import os
@@ -11,14 +11,14 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse
 from starlette.routing import Mount, Route
 
-from rozkoduj_mcp.auth import (
+from decodetick_mcp.auth import (
     AUDIENCE,
     ISSUER,
     JWTAuthContextMiddleware,
     default_verifier,
 )
-from rozkoduj_mcp.logging import RequestLoggingMiddleware
-from rozkoduj_mcp.server import TRANSPORT_SECURITY, mcp
+from decodetick_mcp.logging import RequestLoggingMiddleware
+from decodetick_mcp.server import TRANSPORT_SECURITY, mcp
 
 __version__ = version("decodetick-mcp")
 

@@ -1,11 +1,11 @@
-"""Tests for rozkoduj_mcp.tools.leaderboard."""
+"""Tests for decodetick_mcp.tools.leaderboard."""
 
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from rozkoduj_mcp.tools.leaderboard import leaderboard
+from decodetick_mcp.tools.leaderboard import leaderboard
 
 
 def _mock_result() -> dict[str, Any]:
@@ -26,8 +26,8 @@ def _mock_result() -> dict[str, Any]:
                     "max_drawdown": 18.0,
                     "win_rate_pct": 61.0,
                     "num_trades": 142,
-                    "rozkoduj_score": 78.0,
-                    "rozkoduj_band": "strong",
+                    "decodetick_score": 78.0,
+                    "decodetick_band": "strong",
                     "score_provisional": False,
                     "unit_risk_band": "balanced",
                     "unit_risk_score": 64.0,
@@ -42,7 +42,7 @@ def _mock_result() -> dict[str, Any]:
 
 class TestLeaderboard:
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.leaderboard.scanner")
+    @patch("decodetick_mcp.tools.leaderboard.scanner")
     async def test_returns_ranked_strategies(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.list_strategies = AsyncMock(return_value=_mock_result())
 
@@ -60,7 +60,7 @@ class TestLeaderboard:
         assert result.items[0].slug == "ma-cross-ema"
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.leaderboard.scanner")
+    @patch("decodetick_mcp.tools.leaderboard.scanner")
     async def test_custom_filters(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.list_strategies = AsyncMock(return_value=_mock_result())
 
@@ -78,7 +78,7 @@ class TestLeaderboard:
         )
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.leaderboard.scanner")
+    @patch("decodetick_mcp.tools.leaderboard.scanner")
     async def test_symbol_filter_forwarded(self, mock_scanner: AsyncMock) -> None:
         # "What strategy works best on AAPL?" - the symbol reaches the API.
         mock_scanner.list_strategies = AsyncMock(return_value=_mock_result())

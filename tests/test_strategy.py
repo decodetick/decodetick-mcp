@@ -1,11 +1,11 @@
-"""Tests for rozkoduj_mcp.tools.strategy."""
+"""Tests for decodetick_mcp.tools.strategy."""
 
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from rozkoduj_mcp.tools.strategy import strategy
+from decodetick_mcp.tools.strategy import strategy
 
 
 def _mock_result() -> dict[str, Any]:
@@ -23,8 +23,8 @@ def _mock_result() -> dict[str, Any]:
             "max_drawdown": 18.0,
             "win_rate_pct": 61.0,
             "num_trades": 142,
-            "rozkoduj_score": 78.0,
-            "rozkoduj_band": "strong",
+            "decodetick_score": 78.0,
+            "decodetick_band": "strong",
             "score_provisional": False,
             "unit_risk_band": "balanced",
             "unit_risk_score": 64.0,
@@ -40,7 +40,7 @@ def _mock_result() -> dict[str, Any]:
 
 class TestStrategy:
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.strategy.scanner")
+    @patch("decodetick_mcp.tools.strategy.scanner")
     async def test_returns_dossier(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.strategy_details = AsyncMock(return_value=_mock_result())
 
@@ -50,11 +50,11 @@ class TestStrategy:
         assert result.slug == "ma-cross-ema"
         assert result.best_run is not None
         assert result.best_run["cagr"] == 0.45
-        assert result.best_run["rozkoduj_score"] == 78.0
+        assert result.best_run["decodetick_score"] == 78.0
         assert result.best_run["unit_risk_band"] == "balanced"
 
     @pytest.mark.anyio
-    @patch("rozkoduj_mcp.tools.strategy.scanner")
+    @patch("decodetick_mcp.tools.strategy.scanner")
     async def test_supports_algorithm_uid(self, mock_scanner: AsyncMock) -> None:
         mock_scanner.strategy_details = AsyncMock(return_value=_mock_result())
 

@@ -30,7 +30,7 @@ _CACHE_TTL_SECONDS: Final[float] = 3300.0
 
 # Audience the outbound token is minted for.
 _DEFAULT_AUDIENCE: Final[str] = os.environ.get(
-    "ROZKODUJ_API_AUDIENCE", "https://api.rozkoduj.com"
+    "DECODETICK_API_AUDIENCE", "https://api.decodetick.com"
 )
 
 # Tokens carry the audience in their ``aud`` claim, so the cache is keyed
