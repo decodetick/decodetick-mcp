@@ -26,7 +26,7 @@ TRANSPORT_SECURITY = TransportSecuritySettings(
     enable_dns_rebinding_protection=True,
     allowed_hosts=[
         "mcp.decodetick.com",
-        "rozkoduj-mcp-980145962964.europe-west1.run.app",
+        "decodetick-mcp-1017357454498.europe-west1.run.app",
         "localhost",
         "localhost:*",
         "127.0.0.1",
