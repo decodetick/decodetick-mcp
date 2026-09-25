@@ -1,5 +1,10 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/decodetick/decodetick-mcp/main/docs/assets/logo-dark.svg">
+  <img alt="Decodetick MCP" src="https://raw.githubusercontent.com/decodetick/decodetick-mcp/main/docs/assets/logo.svg" width="440">
+</picture>
+
 # Decode the Markets
 
 Market intelligence for your AI assistant - algo-trading strategies, analytics and specialized research knowledge.
