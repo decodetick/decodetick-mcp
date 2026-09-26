@@ -27,9 +27,6 @@ Market intelligence for your AI assistant - algo-trading strategies, analytics a
 
 ## Getting started
 
-The hosted server works immediately - no API key, no sign-up. Signing in on a
-paid tier adds the deeper knowledge base to research results.
-
 **Standard config** works in most MCP clients:
 
 ```json
